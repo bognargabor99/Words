@@ -1,0 +1,77 @@
+<Page x:Class="Words.Views.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:controls="using:Template10.Controls"
+      xmlns:cont="using:Microsoft.Toolkit.Uwp.UI.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Words.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:Words.ViewModels"
+      xmlns:media="Microsoft.Toolkit.Uwp.UI.Media"
+      mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:MainPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+    <Page.Resources>
+        
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1">
+            <StackPanel.Background>
+                <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                    <GradientStop Color="#00e676" Offset="0.0" />
+                    <GradientStop Color="#00c853" Offset="0.7" />
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <controls:PageHeader Content="Translate" Foreground="White" Background="#009624"/>
+        
+            <RelativePanel HorizontalAlignment="Center" Margin="0, 10">
+                <TextBlock x:Name="LabelFrom" Margin="8" TextWrapping="Wrap" Text="From:"/>
+                <ComboBox x:Name="CbFrom" RelativePanel.RightOf="LabelFrom" MinWidth="110"
+                          ItemsSource="{Binding LangsFrom}" 
+                          SelectionChanged="{x:Bind ViewModel.LangFromChanged}" PlaceholderText="Choose..." 
+                          SelectedItem="{x:Bind ViewModel.From, Mode=TwoWay}"/>
+                <TextBlock x:Name="LabelTo" RelativePanel.RightOf="CbFrom" Margin="8" TextWrapping="Wrap" Text="To:"/>
+                <ComboBox x:Name="CbTo" RelativePanel.RightOf="LabelTo" MinWidth="110"
+                          ItemsSource="{Binding LangsTo}" 
+                          SelectionChanged="{x:Bind ViewModel.LangToChanged}" PlaceholderText="Choose..." 
+                          SelectedItem="{x:Bind ViewModel.To, Mode=TwoWay}"/>
+            </RelativePanel>
+
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="2" Grid.Column="0" Margin="6" Width="200" PlaceholderText="Type word here..." 
+                         Text="{x:Bind ViewModel.Word, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="2" Grid.Column="1" Content="Translate" Margin="6" Command="{x:Bind ViewModel.TranslateCommand}" Foreground="White"/>
+
+            </Grid>
+            <cont:DataGrid
+                Margin="10" ColumnWidth="180" MaxWidth="560"
+                AutoGenerateColumns="True"
+                ItemsSource="{x:Bind ViewModel.Translations, Mode=TwoWay}"/>
+        </StackPanel>
+        <HyperlinkButton Grid.Row="2" VerticalAlignment="Bottom" Content="Find Synonyms for this word" Margin="10" Click="{x:Bind ViewModel.NavigateToSynonyms}"  HorizontalAlignment="Right" Foreground="White"/>
+    </Grid>
+</Page>
+
